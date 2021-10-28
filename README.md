@@ -1,2 +1,2 @@
-# vue-monster-slayer
+# Vue Monster Slayer
 Monster Slayer Game

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>Monster Slayer</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap"
+        rel="stylesheet"
+    />
+    <link href="styles.css" rel="stylesheet"/>
+    <script defer src="https://unpkg.com/vue@next"></script>
+    <script defer src="app.js"></script>
+</head>
+<body>
+<header>
+    <h1>Monster Slayer</h1>
+</header>
+<main id="game">
+    <div class="section">
+        <section class="container" id="monster">
+            <h2>Monster Health</h2>
+            <div class="healthbar">
+                <div :style="renderMonsterStyles" class="healthbar__value"></div>
+            </div>
+        </section>
+        <section class="container" id="player">
+            <h2>Your Health</h2>
+            <div class="healthbar">
+                <div :style="renderPlayerStyles" class="healthbar__value"></div>
+            </div>
+        </section>
+        <section id="controls" v-if="!winner">
+            <button @click="attackMonster">ATTACK</button>
+            <button :disabled="mayUseSpecialAttack" @click="specialAttackMonster">SPECIAL ATTACK</button>
+            <button :disabled="mayUsePlayerHeal" @click="healPlayer">HEAL</button>
+            <button @click="surrenderPlayer">SURRENDER</button>
+        </section>
+        <section class="container" v-else>
+            <h2>Game Over!</h2>
+            <h3 v-if="winner === 'monster'">You lost :(</h3>
+            <h3 v-else-if="winner === 'player'">You won :)</h3>
+            <h3 v-else>It's a draw :/</h3>
+            <button @click="startNewGame">Start New Game</button>
+        </section>
+    </div>
+    <div class="section section__log">
+        <section class="container" id="log">
+            <h2>Battle Log</h2>
+            <ul>
+                <li :key="index" key="index" v-for="(log, index) in logMessages">
+                    <span class="round" v-if="log?.actionRound">
+                        {{ log?.actionRound
+                        }}{{ log?.actionRound === 1 ? 'st' : log?.actionRound === 2 ? 'nd' : log?.actionRound === 3 ? 'rd' : 'th'
+                        }}
+                        round:
+                    </span>
+                    <span :class="log.actionBy === 'player' ? 'log--player' : 'log--monster'">
+                        {{ log.actionBy === 'player' ? 'Player ' : 'Monster '}}
+                    </span>
+                    <span>
+                        {{ log.actionType === 'attack' ? 'attack and deal ' : log.actionType === 'surrender' ? 'surrender himself ' : 'heals himself '}}
+                    </span>
+                    <span
+                        :class="log.actionType === 'attack' || log.actionType === 'surrender' ? 'log--damage' : 'log--heal'">
+                        {{ log.actionValue }}
+                    </span>
+                </li>
+            </ul>
+        </section>
+    </div>
+</main>
+</body>
+</html>
